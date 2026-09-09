@@ -30,9 +30,9 @@
 
 | 버전 | 스택 | GitHub |
 |---|---|---|
-| v3 | Spring Boot 3 + JPA + JWT/Redis + Next.js(React) + OpenAI GPT API | [SBErpV3](https://github.com/yoonguri988) |
-| v2 | Spring Boot + MyBatis + Thymeleaf + Oracle | [SBErpV2](https://github.com/yoonguri988) |
-| v1 | Spring MVC + JSP + MyBatis + MySQL | [SBErpV1](https://github.com/yoonguri988) |
+| v3 | Spring Boot 3 + JPA + JWT/Redis + Next.js(React) + OpenAI GPT API | [SBErpV3](https://github.com/yoonguri988/spring-breeze-erp/tree/main/spring-breeze-erp-v3) |
+| v2 | Spring Boot + MyBatis + Thymeleaf + Oracle | [SBErpV2](https://github.com/yoonguri988/spring-breeze-erp/tree/main/spring-breeze-erp-v2) |
+| v1 | Spring MVC + JSP + MyBatis + MySQL | [SBErpV1](https://github.com/yoonguri988/spring-breeze-erp/tree/main/spring-breeze-erp-v1) |
 
 **핵심 구현**
 - **태스크 의존성 & 병목(Critical Path) 탐색**: `parent_task_id` 자기참조 트리 + 재귀 CTE + DFS 순환탐지. "본인은 지연됐지만 부모는 정상"인 태스크를 시발점으로 판별하는 자체 알고리즘 설계, Frappe Gantt에 강조 표시 연동
