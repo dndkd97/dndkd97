@@ -3,7 +3,7 @@
 **"설계부터 트러블슈팅까지 끝까지 책임지는 개발자"**
 문제의 겉면이 아니라 원인을 먼저 보는 백엔드 개발자입니다.
 
-📮 enqn12_14@naver.com &nbsp;|&nbsp; 🔗 [github.com/yoonguri988](https://github.com/yoonguri988)
+📮 enqn12_14@naver.com &nbsp;|&nbsp; 🔗 [github.com/dndkd97](https://github.com/dndkd97)
 
 <br>
 
