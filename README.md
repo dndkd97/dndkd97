@@ -3,23 +3,32 @@
 **"설계부터 트러블슈팅까지 끝까지 책임지는 개발자"**
 문제의 겉면이 아니라 원인을 먼저 보는 백엔드 개발자입니다.
 
-📮 enqn12_14@naver.com &nbsp;|&nbsp; 🔗 [github.com/dndkd97](https://github.com/dndkd97)
+📮 enqn12_14@naver.com &nbsp;|&nbsp; 🔗 [github.com/dndkd97](https://github.com/dndkd97) &nbsp;|&nbsp; 📖 [Notion](https://app.notion.com/p/43af1d1d117583089d1301968d5084db)
 
 <br>
 
+## How I Work
+
+- **원인을 먼저 본다** — 에러 메시지 하나로 끝내지 않고, 계층(뷰-컨트롤러-매퍼)을 하나씩 재현하며 근본 원인을 추적합니다
+- **영향 범위를 먼저 그린다** — 기능 하나를 바꾸기 전에 연관 데이터·다른 모듈에 미치는 영향을 먼저 검토합니다
+- **협업 규격을 문서로 남긴다** — API 스펙, DB 설계, 트러블슈팅 내역을 팀과 공유해 같은 문제가 반복되지 않게 합니다
+  
 ## Skills
 
 **Backend**
-`Java` `Spring Boot` `Spring Security` `JWT` `Redis` `MyBatis` `JPA` `Oracle DB`
+`Java` `Spring Boot` `Spring Security` `JWT` `Redis` `MyBatis` `JPA` `Oracle DB` `MySQL`
 
 **Frontend**
 `React` `Redux Toolkit` `redux-saga` `Thymeleaf` `Ant Design`
 
-**Infra**
-`AWS EC2` `Nginx` `Git / GitHub Actions`
+**Data & Analytics**
+`Python` `Django` `Pandas` `Chart.js`
+
+**Infra & Collaboration**
+`AWS EC2` `Nginx` `GitHub Actions` `Git Flow` `Swagger`
 
 **AI / API**
-`OpenAI GPT API` `RAG` `Google Docs/Drive API` `Discord Webhook` `Swagger`
+`OpenAI GPT API` `RAG` `Google Docs/Drive API` `Discord Webhook` `PDFBox`
 
 <br>
 
@@ -35,23 +44,18 @@
 | v1 | Spring MVC + JSP + MyBatis + MySQL | [SBErpV1](https://github.com/dndkd97/SB_ERP_V1) |
 
 **핵심 구현**
-- **태스크 의존성 & 병목(Critical Path) 탐색**: `parent_task_id` 자기참조 트리 + 재귀 CTE + DFS 순환탐지. "본인은 지연됐지만 부모는 정상"인 태스크를 시발점으로 판별하는 자체 알고리즘 설계, Frappe Gantt에 강조 표시 연동
-- **채용관리(RAG) 모듈**: Recruit/Applicant/Resume/ResumeChunk 설계 및 전 계층 구현, Oracle 18c XE의 VECTOR 미지원을 JSON/CLOB 저장 + Java 코사인 유사도 계산으로 우회
-- **인증 체계 이원화**: 사내 직원 JWT 인증과 지원자용 소셜 로그인(Kakao/Naver/Google)을 완전히 분리된 라우팅으로 구성, provider+providerId 소유권 검증으로 IDOR 차단
-- **보안 취약점 점검**: `comId` 검증 공통화(`SecurityUtil.checkComIdAccess`), `ROLE_ADMIN` 권한 오분류 수정
-- **운영 자동화**: GPT 기반 프로젝트 리스크 분석 → Discord 알림, 주간 리포트 Google Docs 자동화, 개인 PDF 리포트(PDFBox) 생성
+- **태스크 의존성 & 병목(Critical Path) 탐색**: `parent_task_id` 자기참조 트리 + 재귀 CTE + DFS 순환탐지. "본인은 지연됐지만 부모는 정상"인 태스크를 시발점으로 판별하는 자체 알고리즘 설계, Frappe Gantt에 강조 표시 연동, 서브트리 단위 비관적 락(`SELECT FOR UPDATE WAIT 5`)으로 동시 수정 시 정합성 확보
+- **채용관리(RAG) 모듈**: Recruit/Applicant/Resume/ResumeChunk 설계 및 전 계층 구현, Oracle 18c XE의 VECTOR 미지원을 JSON/CLOB 저장 + Java 코사인 유사도 계산으로 우회, GPT 프롬프트 기반 적합도(fit_score) 평가
+- **인증 체계 이원화**: 사내 직원 JWT 인증과 지원자용 소셜 로그인(Kakao/Naver/Google)을 완전히 분리된 라우팅으로 구성, provider+providerId 소유권 검증 및 Redis 기반 Refresh Token TTL 관리로 IDOR 차단
+- **하이브리드 Persistence 아키텍처**: 기존 복합 SQL 모듈은 MyBatis 기반 RestController API로 전환, 신규 채용 모듈은 JPA(Entity-Repository)로 설계 — 이력 보존용 연관관계(Recruit-Applicant)는 Cascade 미적용, 실제 소유 관계(Applicant-Resume)는 `cascade=ALL + orphanRemoval` 차등 적용
+- **Spring Boot ↔ Django MSA 데이터 연동**: 오라클 통계 데이터를 Django REST API로 송수신하는 파이프라인 구축, Pandas로 합계·점유율 가공(`update_or_create`로 중복 적재 방지), Chart.js + `json_script` 필터로 대시보드 시각화
+- **파일 저장 구조 재설계**: 로컬 디스크 저장의 팀원 간 미공유 문제를 Oracle BLOB 저장 + 전용 다운로드 API로 재설계
+- **보안 취약점 점검**: `comId` 검증 공통화(`SecurityUtil.checkComIdAccess`), `ROLE_ADMIN` 권한 오분류 수정(`isRoot`/`isAdminOrRoot` 분리)
+- **운영 자동화**: GPT 기반 프로젝트 리스크 분석 → Discord 알림, 주간 리포트 Google Docs 자동화(`@Scheduled`), 개인 PDF 리포트(PDFBox 표지 제거) 생성
+- **API 규격화 & 협업**: `@Schema(hidden=true)`/`@Valid` 정비, 중앙 CORS 설정 통합, Swagger로 프론트-백엔드 DTO 사전 협의, Git Flow 브랜치 전략 준수
 
 <br>
 
-## Troubleshooting Highlight
-
-> 태스크 순환 참조 탐지 로직에서 NPE 발생
-
-- **원인**: `isCyclic` 로직의 `.map().findFirst()` 처리 순서 오류
-- **해결**: DFS 기준으로 탐색 순서 재정리
-- **학습**: 재귀/그래프 탐색 로직은 조건 순서 하나로도 예외 지점이 달라진다는 것을 체감, 이후 순서를 먼저 문서화하고 구현
-
-<br>
 
 ## Career Path
 
