@@ -35,12 +35,12 @@
 ## Projects
 
 ### 🏢 SpringBreeze ERP — 사내 통합 ERP 시스템
-4인 팀 프로젝트 · **프로젝트 / 프로젝트 멤버 / 태스크** 모듈 전담 → v3에서 **채용관리(RAG)** 모듈 신규 구축
+4인 팀 프로젝트 · **프로젝트 / 프로젝트 멤버 / 태스크 / 공지** 모듈 전담 → v3에서 **채용관리(RAG)** 모듈 신규 구축
 
 | 버전 | 스택 | GitHub |
 |---|---|---|
-| v3 | Spring Boot 3 + JPA + JWT/Redis + Next.js(React) + OpenAI GPT API | [SBErpV3](https://github.com/yoonguri988/spring-breeze-erp/tree/main/spring-breeze-erp-v3) |
-| v2 | Spring Boot + MyBatis + Thymeleaf + Oracle | [SBErpV2](https://github.com/yoonguri988/spring-breeze-erp/tree/main/spring-breeze-erp-v2) |
+| v3 | Spring Boot 3 + JPA + JWT/Redis + Next.js(React) + OpenAI GPT API | [SBErpV3](https://github.com/dndkd97/SB_ERP_V3) |
+| v2 | Spring Boot + MyBatis + Thymeleaf + Oracle | [SBErpV2](https://github.com/dndkd97/SB_ERP_V2) |
 | v1 | Spring MVC + JSP + MyBatis + MySQL | [SBErpV1](https://github.com/dndkd97/SB_ERP_V1) |
 
 **핵심 구현**
