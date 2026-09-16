@@ -50,7 +50,8 @@
 - **인증 체계 이원화**: 사내 직원 JWT 인증과 지원자용 소셜 로그인(Kakao/Naver/Google)을 완전히 분리된 라우팅으로 구성, provider+providerId 소유권 검증 및 Redis 기반 Refresh Token TTL 관리로 IDOR 차단
 - **하이브리드 Persistence 아키텍처**: 기존 복합 SQL 모듈은 MyBatis 기반 RestController API로 전환, 신규 채용 모듈은 JPA(Entity-Repository)로 설계 — 이력 보존용 연관관계(Recruit-Applicant)는 Cascade 미적용, 실제 소유 관계(Applicant-Resume)는 `cascade=ALL + orphanRemoval` 차등 적용
 - **Spring Boot ↔ Django MSA 데이터 연동**: 오라클 통계 데이터를 Django REST API로 송수신하는 파이프라인 구축, Pandas로 합계·점유율 가공(`update_or_create`로 중복 적재 방지), Chart.js + `json_script` 필터로 대시보드 시각화
-- **채용 데이터 분석 서버 구축 & 단독 배포 (v4)**: 채용관리 배포 이후 통계 요구에 대응해 Python/Django/Pandas 기반 읽기 전용 분석 서버를 단독 설계·구축, 전형 파이프라인(RECEIVED→HIRED) 전환율·정체율과 월별 지원자 추이를 산출하는 내부 API 2종 개발, 동일 EC2에 별도 프로세스로 추가 배포 후 Nginx 경로 라우팅과 GitHub Actions CI/CD 구성까지 단독 진행
+- **채용 데이터 분석 로직 (Python/Django/Pandas, v4)**: 전형 파이프라인(RECEIVED→SCREENING→INTERVIEW→HIRED) 단계별 통과 인원을 역순 누적 합산해 "최종 도달 인원" 기준 전환율·정체율 산출, REJECTED는 별도 트랙 분리, Pandas `reindex`로 데이터 누락 상태에서도 고정된 응답 순서 보장, 내부 전용 API 2종(`/dashboard/api/statistics/`, `/dashboard/api/analysis/`)으로 기존 Spring 백엔드와 REST 연동
+- **AWS 배포 자동화 (v4)**: 채용 데이터 분석 서버를 동일 EC2 인스턴스에 별도 프로세스(8000번 포트)로 단독 추가 배포, Nginx 리버스 프록시에 경로별(`/dashboard/`) 라우팅 규칙 구성, GitHub Actions로 push/PR 시 build-test-deploy 자동화(CI/CD) 파이프라인 구축, 배포 환경에서만 발생하던 500 에러를 PM2 상시 구동 전환 + Nginx 라우팅 누락 수정으로 해결
 - **파일 저장 구조 재설계**: 로컬 디스크 저장의 팀원 간 미공유 문제를 Oracle BLOB 저장 + 전용 다운로드 API로 재설계
 - **보안 취약점 점검**: `comId` 검증 공통화(`SecurityUtil.checkComIdAccess`), `ROLE_ADMIN` 권한 오분류 수정(`isRoot`/`isAdminOrRoot` 분리)
 - **운영 자동화**: GPT 기반 프로젝트 리스크 분석 → Discord 알림, 주간 리포트 Google Docs 자동화(`@Scheduled`), 개인 PDF 리포트(PDFBox 표지 제거) 생성
