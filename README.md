@@ -12,30 +12,29 @@
 - **원인을 먼저 본다** — 에러 메시지 하나로 끝내지 않고, 계층(뷰-컨트롤러-매퍼)을 하나씩 재현하며 근본 원인을 추적합니다
 - **영향 범위를 먼저 그린다** — 기능 하나를 바꾸기 전에 연관 데이터·다른 모듈에 미치는 영향을 먼저 검토합니다
 - **협업 규격을 문서로 남긴다** — API 스펙, DB 설계, 트러블슈팅 내역을 팀과 공유해 같은 문제가 반복되지 않게 합니다
-  
+
+<br>
+
 ## Skills
 
-**Backend**
-`Java` `Spring Boot` `Spring Security` `JWT` `Redis` `MyBatis` `JPA` `Oracle DB` `MySQL`
+**Backend** `Java` `Spring Boot` `Spring Security` `JWT` `Redis` `MyBatis` `JPA` `Oracle DB` `MySQL`
 
-**Frontend**
-`React` `Redux Toolkit` `redux-saga` `Thymeleaf` `Ant Design`
+**Frontend** `React` `Redux Toolkit` `redux-saga` `Thymeleaf` `Ant Design`
 
-**Data & Analytics**
-`Python` `Django` `Pandas` `Chart.js`
+**Data & Analytics** `Python` `Django` `Pandas` `Chart.js`
 
-**Infra & Collaboration**
-`AWS EC2` `Nginx` `GitHub Actions` `Git Flow` `Swagger`
+**Infra & Collaboration** `AWS EC2` `Nginx` `GitHub Actions` `Git Flow` `Swagger`
 
-**AI / API**
-`OpenAI GPT API` `RAG` `Google Docs/Drive API` `Discord Webhook` `PDFBox`
+**AI / API** `OpenAI GPT API` `RAG` `Google Docs/Drive API` `Discord Webhook` `PDFBox`
 
 <br>
 
 ## Projects
 
 ### 🏢 SpringBreeze ERP — 사내 통합 ERP 시스템
-4인 팀 프로젝트 · **프로젝트 / 프로젝트 멤버 / 태스크 / 공지** 모듈 전담 → v3에서 **채용관리(RAG)** 모듈 신규 구축 → v4에서 **채용 데이터 분석 서버**(Python/Django/Pandas) 단독 추가 개발 및 배포
+
+4인 팀 프로젝트 · **프로젝트 / 프로젝트 멤버 / 태스크 / 공지** 모듈 전담 → v3에서 **채용관리(RAG)** 모듈 신규 구축 → v4에서 **채용 데이터 분석 서버**(Python/Django/Pandas) 단독 추가 개발 및 배포.
+태스크 의존성 & Critical Path 탐색 알고리즘, RAG 기반 이력서 분석, JWT/Redis 이중 인증 체계 등을 직접 설계·구현했습니다. 구현 상세와 트러블슈팅은 각 저장소 README에 정리되어 있습니다.
 
 | 버전 | 스택 | GitHub |
 |---|---|---|
@@ -44,21 +43,7 @@
 | v2 | Spring Boot + MyBatis + Thymeleaf + Oracle | [SBErpV2](https://github.com/dndkd97/SB_ERP_V2) |
 | v1 | Spring MVC + JSP + MyBatis + MySQL | [SBErpV1](https://github.com/dndkd97/SB_ERP_V1) |
 
-**핵심 구현**
-- **태스크 의존성 & 병목(Critical Path) 탐색**: `parent_task_id` 자기참조 트리 + 재귀 CTE + DFS 순환탐지. "본인은 지연됐지만 부모는 정상"인 태스크를 시발점으로 판별하는 자체 알고리즘 설계, Frappe Gantt에 강조 표시 연동, 서브트리 단위 비관적 락(`SELECT FOR UPDATE WAIT 5`)으로 동시 수정 시 정합성 확보
-- **채용관리(RAG) 모듈**: Recruit/Applicant/Resume/ResumeChunk 설계 및 전 계층 구현, Oracle 18c XE의 VECTOR 미지원을 JSON/CLOB 저장 + Java 코사인 유사도 계산으로 우회, GPT 프롬프트 기반 적합도(fit_score) 평가
-- **인증 체계 이원화**: 사내 직원 JWT 인증과 지원자용 소셜 로그인(Kakao/Naver/Google)을 완전히 분리된 라우팅으로 구성, provider+providerId 소유권 검증 및 Redis 기반 Refresh Token TTL 관리로 IDOR 차단
-- **하이브리드 Persistence 아키텍처**: 기존 복합 SQL 모듈은 MyBatis 기반 RestController API로 전환, 신규 채용 모듈은 JPA(Entity-Repository)로 설계 — 이력 보존용 연관관계(Recruit-Applicant)는 Cascade 미적용, 실제 소유 관계(Applicant-Resume)는 `cascade=ALL + orphanRemoval` 차등 적용
-- **Spring Boot ↔ Django MSA 데이터 연동**: 오라클 통계 데이터를 Django REST API로 송수신하는 파이프라인 구축, Pandas로 합계·점유율 가공(`update_or_create`로 중복 적재 방지), Chart.js + `json_script` 필터로 대시보드 시각화
-- **채용 데이터 분석 로직 (Python/Django/Pandas, v4)**: 전형 파이프라인(RECEIVED→SCREENING→INTERVIEW→HIRED) 단계별 통과 인원을 역순 누적 합산해 "최종 도달 인원" 기준 전환율·정체율 산출, REJECTED는 별도 트랙 분리, Pandas `reindex`로 데이터 누락 상태에서도 고정된 응답 순서 보장, 내부 전용 API 2종(`/dashboard/api/statistics/`, `/dashboard/api/analysis/`)으로 기존 Spring 백엔드와 REST 연동
-- **AWS 배포 자동화 (v4)**: 채용 데이터 분석 서버를 동일 EC2 인스턴스에 별도 프로세스(8000번 포트)로 단독 추가 배포, Nginx 리버스 프록시에 경로별(`/dashboard/`) 라우팅 규칙 구성, GitHub Actions로 push/PR 시 build-test-deploy 자동화(CI/CD) 파이프라인 구축, 배포 환경에서만 발생하던 500 에러를 PM2 상시 구동 전환 + Nginx 라우팅 누락 수정으로 해결
-- **파일 저장 구조 재설계**: 로컬 디스크 저장의 팀원 간 미공유 문제를 Oracle BLOB 저장 + 전용 다운로드 API로 재설계
-- **보안 취약점 점검**: `comId` 검증 공통화(`SecurityUtil.checkComIdAccess`), `ROLE_ADMIN` 권한 오분류 수정(`isRoot`/`isAdminOrRoot` 분리)
-- **운영 자동화**: GPT 기반 프로젝트 리스크 분석 → Discord 알림, 주간 리포트 Google Docs 자동화(`@Scheduled`), 개인 PDF 리포트(PDFBox 표지 제거) 생성
-- **API 규격화 & 협업**: `@Schema(hidden=true)`/`@Valid` 정비, 중앙 CORS 설정 통합, Swagger로 프론트-백엔드 DTO 사전 협의, Git Flow 브랜치 전략 준수
-
 <br>
-
 
 ## Career Path
 
