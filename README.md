@@ -1,7 +1,7 @@
 # 최다영
 
 **"설계부터 트러블슈팅까지 끝까지 책임지는 개발자"**
-문제의 겉면이 아니라 원인을 먼저 보는 백엔드 개발자입니다.
+문제의 겉면이 아니라 원인을 먼저 보는 풀스택 개발자입니다.
 
 📮 enqn12_14@naver.com &nbsp;|&nbsp; 🔗 [github.com/dndkd97](https://github.com/dndkd97) &nbsp;|&nbsp; 📖 [Notion](https://app.notion.com/p/43af1d1d117583089d1301968d5084db)
 
